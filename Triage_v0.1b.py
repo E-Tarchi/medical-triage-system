@@ -1,15 +1,14 @@
-# --- Basic Medical Triage - Version 0.1 Beta ---
-# Initial prototype: focus on blood pressure and respiratory/cardiac symptoms
+# --- Medical Triage System - Version 0.2 ---
+# Prototype update: Added Green and White codes for full categorization
 
-# Clinical list for cardiac symptoms
-cardiac_symptoms = ["chest pain", "arrhythmia", "palpitations"]
+cardiac_symptoms = ["chest pain", "arrhythmia", "palpitations", "shortness of breath"]
 
 while True:
-    print("\n--- NEW TRIAGE ADMISSION ---")
+    print("\n--- EMERGENCY ROOM ADMISSION SYSTEM v0.2 ---")
     patient_name = input("Patient Name (or type 'exit'): ").title()
 
     if patient_name == "Exit":
-        print("Shift ended. System closing. Rest well, warrior!")
+        print("System closing. Great job today, warrior!")
         break
 
     # Input vital signs
@@ -17,20 +16,17 @@ while True:
     systolic_pressure = int(input("Systolic Blood Pressure (mmHg): "))
     main_symptom = input("Main Symptom: ").lower().strip()
 
-    # Logic Flag for Blood Gas Analysis (BGA/EGA)
-    bga_needed = False
-    if oxygen_saturation <= 93:
-        print(">>> ALERT: Perform BGA (EGA) and administer Oxygen")
-        bga_needed = True
-
-    # Priority Categorization (Triage Logic)
-    if systolic_pressure >= 180:
-        print(f">>> RED CODE: Immediate danger for {patient_name}!")
-    elif bga_needed == True:
-        print(f">>> YELLOW CODE for {patient_name} (Respiratory Failure)")
-    elif main_symptom in cardiac_symptoms:
-        print(f"Forward {patient_name} to Cardiology department.")
-    elif 140 <= systolic_pressure < 180:
-        print(f">>> YELLOW CODE for {patient_name}")
+    # Priority Logic (Triage)
+    if systolic_pressure >= 180 or oxygen_saturation < 90:
+        print(f">>> RED CODE: Immediate intervention for {patient_name}!")
+        
+    elif (140 <= systolic_pressure < 180) or (90 <= oxygen_saturation <= 93) or (main_symptom in cardiac_symptoms):
+        print(f">>> YELLOW CODE for {patient_name} (Urgent)")
+        if oxygen_saturation <= 93:
+            print(">>> CLINICAL NOTE: Perform BGA/EGA and administer Oxygen.")
+            
+    elif 120 <= systolic_pressure < 140:
+        print(f">>> GREEN CODE for {patient_name} (Low Priority)")
+        
     else:
-        print(f">>> Patient {patient_name} waiting for general examination.")
+        print(f">>> WHITE CODE for {patient_name} (Non-Urgent/General Exam)")
