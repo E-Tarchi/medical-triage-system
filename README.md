@@ -1,30 +1,33 @@
-🏥 Medical Triage System (v0.2)
-🚀 Project Overview
-This is a Python-based triage tool designed to automate clinical assessment logic. The project is built upon my professional experience as a Healthcare Professional (OSS), applying healthcare domain knowledge to software development.
+# Tuscany Triage System - International Edition (v0.3.7)
 
-This repository represents a key milestone in my journey toward becoming a Cloud Engineer while pursuing my L-31 Computer Science degree.
+### 🏥 Context & Vision
+Developed by a healthcare professional, this project bridges the gap between frontline clinical experience and Cloud Engineering. It is a decision-support tool designed to streamline the triage process, following the logic of the **Tuscany Region (Italy) Triage Protocols (Delibera 444/2019)** but localized for international environments.
 
-✨ Key Features (v0.2 Update)
-Full Triage Categorization: Implementation of the complete color-coded priority system (Red, Yellow, Green, White).
+> **Note on Versioning:** Versions 0.3.0 through 0.3.6 were used for internal development, focusing on refining GCS logic, stress-testing input validation, and perfecting the integration between clinical symptoms and vital signs before this public release (v0.3.7).
 
-Vital Signs Monitoring: Real-time input for Oxygen Saturation (SpO2) and Systolic Blood Pressure.
+### 🚀 Key Features
+- **Integrated Clinical Logic:** Automatically cross-checks symptoms with vital signs.
+- **GCS Calculator:** Full Glasgow Coma Scale assessment with built-in reference legends.
+- **Smart Keyword Analysis:** Recognizes critical symptoms (e.g., *Chest Pain*, *Stroke*, *Trauma*) and suggests specialized clinical pathways.
+- **Safety-First Validation:** Professional input handling ensures that vital signs (HR, SpO2) and scores remain within realistic clinical ranges.
+- **Live Ward Dashboard:** Real-time tracking of patient workload and color-code distribution during the triage session.
 
-Clinical Priority Logic: Automated decision-making based on physiological thresholds.
+### 🛠 Tech Stack
+- **Language:** Python 3.10+
+- **Platform:** Designed for cross-platform use and optimized for **Raspberry Pi** deployment.
+- **Principles:** Modular programming, Clean Code, and DRY (Don't Repeat Yourself) architecture.
 
-Respiratory Alert: Dedicated logic for Blood Gas Analysis (BGA/EGA) requirements based on SpO2 levels.
+### 📊 Triage Logic Applied
+The system prioritizes patient safety by assigning a code based on the "Worst Case Scenario":
+1. **RED (Emergency):** Critical vitals (SpO2 < 90%, GCS ≤ 8, extreme HR) or immediate life-threat symptoms.
+2. **ORANGE (Urgent):** Compromised vitals or high-risk clinical pathways (Cardiac, Stroke, Major Trauma).
+3. **GREEN/AZURE (Stable):** Normal vital signs and non-urgent symptoms.
 
-Cardiac Screening: Logic-based routing for patients with chest pain or arrhythmias.
+### 📈 Future Roadmap
+- [ ] Persistent Data Storage (CSV/JSON/SQL).
+- [ ] Pain Scale (NRS) Integration.
+- [ ] Time-to-Treatment tracking for each priority code.
+- [ ] Integration with hardware sensors (Pulse Oximeter via GPIO).
 
-🛠️ Technical Foundations
-Logic & Flow: Optimized use of while loops and complex conditional statements (if/elif/else).
-
-Domain Integration: Translating real-world healthcare protocols into executable Python code.
-
-Professional Standards: Full English codebase and documentation for global accessibility and recruiter review.
-
-🗺️ Future Roadmap
-[ ] Data Persistence: Implementing local file logging or SQL integration for patient records.
-
-[ ] Error Handling: Introducing try-except blocks to manage invalid user inputs.
-
-[ ] Cloud Integration: Deploying the logic as an AWS Lambda function to start the transition to cloud architecture.
+---
+*Created by a Cloud Engineering Student & Healthcare Professional.*
