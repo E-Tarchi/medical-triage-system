@@ -71,13 +71,10 @@ This means the software is, and will always remain, **Free and Open Source**.
 
 See the [LICENSE](LICENSE) file for the full legal text.
 
----
-> ⚠️ Medical Disclaimer
 > [!IMPORTANT]
-> **This software is for educational and simulation purposes only.** It is NOT a certified Medical Device and should NOT be used to make actual clinical decisions in a real-world healthcare setting. The author is not responsible for any misuse or clinical outcomes resulting from the use of this code.
----
+> **Medical Disclaimer: Educational and Simulation Purposes Only**
+>
+> This software is NOT a certified Medical Device and should NOT be used to make actual clinical decisions in a real-world healthcare setting. The author is not responsible for any misuse or clinical outcomes resulting from the use of this code.
 
 **Maintained by:** [Emanuele Tarchi](https://www.linkedin.com/in/emanuele-tarchi-it/)
----
-**Maintained by:** [Emanuele Tarchi](https://www.linkedin.com/in/tuo-profilo-linkedin)  
 *Healthcare Professional & Aspiring Software Engineer* "Building tools to support those on the frontline." 🏥💻
