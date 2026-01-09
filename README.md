@@ -3,7 +3,7 @@
 
 ![Version](https://img.shields.io/badge/Version-0.4.1--EN-red)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
+![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
 An advanced **Clinical Decision Support System (CDSS)** designed to assist healthcare professionals in patient prioritization, following the official 5‑color (6‑level) protocol of the **Tuscany Region (Italy)**.
 
@@ -62,9 +62,21 @@ Official **Tuscany Centro** priority scale:
 
 ---
 
-> 🛡 Disclaimer
-> [!IMPORTANT]
-> This software is a simulation and decision‑support tool for educational purposes. It does not replace professional clinical judgment or official hospital protocols. ALWAYS TRUST YOUR CLINICAL EYES.
+## 📄 License
+
+This project is licensed under the **GNU General Public License v3.0**.  
+This means the software is, and will always remain, **Free and Open Source**. 
+
+**Why GPL v3?** As a healthcare professional, I believe clinical logic should be a shared asset. This license ensures that any improvements or derivative works made by others must also be shared with the community under the same terms, preventing the "privatization" of this logic by proprietary entities.
+
+See the [LICENSE](LICENSE) file for the full legal text.
 
 ---
-**Shift completed. High volume managed. Great job out there, stay safe.**
+> ⚠️ Medical Disclaimer
+> [!IMPORTANT]
+> **This software is for educational and simulation purposes only.** It is NOT a certified Medical Device and should NOT be used to make actual clinical decisions in a real-world healthcare setting. The author is not responsible for any misuse or clinical outcomes resulting from the use of this code.
+
+**Maintained by:** [Emanuele Tarchi](https://www.linkedin.com/in/emanuele-tarchi-it/)
+---
+**Maintained by:** [Emanuele Tarchi](https://www.linkedin.com/in/tuo-profilo-linkedin)  
+*Healthcare Professional & Aspiring Software Engineer* "Building tools to support those on the frontline." 🏥💻
