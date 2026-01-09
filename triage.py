@@ -135,7 +135,7 @@ def main():
     print("SESSION CLOSED - Final Ward Report:")
     for color, count in triage_counters.items():
         print(f"  {color}: {count}")
-    print("\nShift ended. Excellent management, Mr. Anderson.")
+    print("\nSession closed. Handover reports ready. Shift ended.")
 
 if __name__ == "__main__":
     main()
