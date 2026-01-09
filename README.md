@@ -75,6 +75,7 @@ See the [LICENSE](LICENSE) file for the full legal text.
 > ⚠️ Medical Disclaimer
 > [!IMPORTANT]
 > **This software is for educational and simulation purposes only.** It is NOT a certified Medical Device and should NOT be used to make actual clinical decisions in a real-world healthcare setting. The author is not responsible for any misuse or clinical outcomes resulting from the use of this code.
+---
 
 **Maintained by:** [Emanuele Tarchi](https://www.linkedin.com/in/emanuele-tarchi-it/)
 ---
