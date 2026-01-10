@@ -1,7 +1,7 @@
 # 🏥 Tuscany Triage System — International Edition
-### *Version 0.4.1 — Clinical Decision Support System*
+### *Version 0.5.7 — Clinical Audit & Global Standard*
 
-![Version](https://img.shields.io/badge/Version-0.4.1--EN-red)
+![Version](https://img.shields.io/badge/Version-0.5.7--EN-blue)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
@@ -9,44 +9,46 @@ An advanced **Clinical Decision Support System (CDSS)** designed to assist healt
 
 ---
 
-## 🚀 What's New in v0.4.1
-This release marks the evolution from a simple data collector to a true clinical reasoning engine.
+## 🚀 What's New in v0.5.7
+This release introduces professional-grade accountability and advanced hemodynamic monitoring.
 
-### 🧠 Clinical Decision Engine
-* **Full Regional Hierarchy:** Integration of all 6 triage codes (White, Azure, Green, Yellow, Orange, Red).
-* **GCS Module:** Automated calculation of the Glasgow Coma Scale.
-* **NRS Pain Integration:** Pain treated as the 5th Vital Sign.
+### 🧠 Advanced Decision Engine
+* **Hemodynamic Safety (Shock Index):** Automatic calculation of HR/SBP ratio to detect occult shock and prevent undertriage.
+* **Full Clinical Audit Trail:** Every admission, manual override, and session start/end is recorded with timestamps in `triage_audit_log.txt`.
+* **Operator Session Management:** Secure login system to track accountability per shift.
+* **Interactive GCS Calculator:** Step-by-step assessment of Eyes, Verbal, and Motor responses.
 
-### ⚡ “X+1” Pain Logic
-If a patient reports severe pain (**NRS ≥ 7**), the system automatically suggests upgrading the priority to the next level in the hierarchy (e.g., Green → Yellow).
-
-### ⚠️ Safety Alerts: Clinical Congruency
-A **Dubious Clinical Congruency Alert** cross‑checks high pain scores with stable vital signs (Heart Rate and Blood Pressure), prompting the operator to reassess psychophysical stress or potential malingering.
+### ⚡ “X+1” & Safety Logic
+- **Pain Upgrade:** Severe pain (**NRS ≥ 7**) triggers an automatic priority upgrade.
+- **Shock Index Override:** If $SI > 0.9$, the system forces an **ORANGE** code (High Risk) regardless of other stable parameters.
+- **Neurological Hard-Stop:** GCS ≤ 8 automatically triggers a **RED** code.
 
 
 ### 📊 Decision Workflow
 ```mermaid
 graph TD
-    A[Patient Arrival] --> B[Vital Signs & GCS]
-    B --> C{Critical Symptoms?}
-    C -- Yes --> D[RED Code / Shock Room]
-    C -- No --> E[Assess Pain NRS]
-    E --> F{NRS >= 7?}
-    F -- Yes --> G[Apply X+1 Upgrade]
-    F -- No --> H[Standard Protocol]
-    G --> I[Final Confirmation]
-    H --> I[Final Confirmation]
-    I --> J[Admission to Ward]
+    A[Operator Login] --> B[Patient Assessment]
+    B --> C{Shock Index > 0.9?}
+    C -- Yes --> D[Forced ORANGE/RED]
+    C -- No --> E{GCS <= 8?}
+    E -- Yes --> D
+    E -- No --> F[Assess Pain NRS]
+    F --> G{NRS >= 7?}
+    G -- Yes --> H[Apply X+1 Upgrade]
+    G -- No --> I[Standard Protocol]
+    H --> L[Audit Trail Logging]
+    I --> L
+    L --> M[Admission Record]
 ```
 
 ## 🛠 Features & Normalization
 
-|Feature | Description |
-| :--- | :--- |
-| **Data Integrity** | Patient names stored in lowercase for database consistency. |
-| **UI Rendering** | Professional display using .title() formatting. |
-| **Vital Cross‑Check** | Automatic Red Code trigger for SpO₂ < 90% or GCS ≤ 8. |
-| **Live Dashboard** | Real‑time monitoring of ward workload by color code. |
+|Feature | Description                                                                                    |
+| :--- |:-----------------------------------------------------------------------------------------------|
+| **Audit Log** | Persistent storage of all clinical decisions for legal/clinical review.                        |
+| **Manual Override** | Operators can deviate from system advice, but the action is logged with a justification trail. |
+| **Data Integrity** | Standardized input normalization (.title() formatting).                                        |
+| **SI Monitoring** | Real-time calculation of occult shock risk (HR/SBP).                                           |
 
 ---
 
