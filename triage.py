@@ -1,13 +1,24 @@
-# --- Tuscany Triage System - International Edition - Version 0.4.1 ---
-# Major Release: NRS Pain Module & Full Regional Hierarchy
-# Features: 
-# - Normalized Patient Database (lower case storage, .title() display)
-# - Full 6-Code Hierarchy (White to Red)
-# - NRS Module with Clinical Congruency Alert
-# - Pain-Based Priority Upgrade (X + 1 Logic)
+# =================================================================
+# Tuscany Triage System v0.5.7
+# Copyright (C) 2026 Emanuele Tarchi
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# =================================================================
 
-# Official Triage Hierarchy (Tuscany Region Protocol)
+import datetime
+
 TRIAGE_CODES = ["WHITE", "AZURE", "GREEN", "YELLOW", "ORANGE", "RED"]
+
 
 def get_valid_score(prompt, min_val, max_val, legend=None):
     if legend:
@@ -22,120 +33,128 @@ def get_valid_score(prompt, min_val, max_val, legend=None):
         except ValueError:
             print("  (!) Error: Please enter a number.")
 
+
+def check_shock_index(hr, sbp):
+    """Calculates Heart Rate / Systolic BP ratio to detect occult shock."""
+    if sbp <= 0: return False
+    index = round(hr / sbp, 2)
+    print(f"\n[📊] HEMODYNAMICS: Shock Index = {index}")
+    if index > 0.9:
+        print("⚠️  CRITICAL ALERT: High Shock Index (>0.9). Potential instability!")
+        return True
+    return False
+
+
+def log_event(message):
+    """Secure logging for clinical audit and accountability."""
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    try:
+        with open("triage_audit_log.txt", "a", encoding="utf-8") as f:
+            f.write(f"[{timestamp}] {message}\n")
+    except Exception as e:
+        print(f"❌ Logging Error: {e}")
+
+
 def display_nrs_legend():
-    print("\n" + "-"*45)
+    print("\n" + "-" * 45)
     print("      PAIN SCALE REFERENCE (NRS)")
-    print("-"*45)
+    print("-" * 45)
     print(" 0      : No Pain")
     print(" 1 - 3  : Mild Pain")
     print(" 4 - 6  : Moderate Pain")
     print(" 7 - 10 : SEVERE PAIN (⚠️ Priority Upgrade)")
-    print("-"*45)
+    print("-" * 45)
+
 
 def main():
-    triage_counters = {color: 0 for color in TRIAGE_CODES}
-    all_patients = []
-    
-    while True:
-        print("\n" + "="*75)
-        print(" TUSCANY TRIAGE SYSTEM v0.4.1-EN - ADVANCED CLINICAL ANALYZER ")
-        print("="*75)
+    print("\n" + "=" * 75)
+    print(" TUSCANY TRIAGE SYSTEM v0.5.7 - CLINICAL AUDIT EDITION ")
+    print("=" * 75)
 
-        raw_name = input("Patient Name or ID (or type 'exit' to quit): ")
+    # 1. OPERATOR LOGIN
+    operator_id = input("Operator ID (Name or Badge Number) to start shift: ").strip().upper()
+    if not operator_id: operator_id = "ANONYMOUS_USER"
+
+    log_event(f"SHIFT_START - Operator: {operator_id}")
+    print(f"\nWelcome, Operator {operator_id}. System ready for admissions.")
+
+    triage_counters = {color: 0 for color in TRIAGE_CODES}
+
+    while True:
+        print("\n" + "-" * 55)
+        raw_name = input("Patient Name/ID (or type 'exit' to logout): ")
         if raw_name.lower() == 'exit':
             break
-        
-        # Data Normalization
-        patient_db_id = raw_name.lower()  # For database consistency
-        display_name = raw_name.title()    # For professional UI display
 
-        # 1. CHIEF COMPLAINT
-        print("\n[CHIEF COMPLAINT / ADMISSION REASON]")
-        symptom = input("  Main symptom or sign: ").lower()
-        
-        # 2. VITAL SIGNS
-        print("\n[VITAL SIGNS]")
-        hr  = get_valid_score("  Heart Rate (BPM): ", 20, 220)
-        sp2 = get_valid_score("  Oxygen Saturation (%): ", 50, 100)
-        sbp = get_valid_score("  Systolic Blood Pressure (mmHg): ", 40, 300)
-        
-        # 3. GCS (NEUROLOGICAL ASSESSMENT)
+        display_name = raw_name.title()
+
+        # 2. ASSESSMENT INPUTS
+        print(f"\n[ASSESSMENT FOR: {display_name}]")
+        symptom = input("  Chief Complaint: ").lower()
+        hr = get_valid_score("  Heart Rate (BPM): ", 20, 220)
+        sbp = get_valid_score("  Systolic BP (mmHg): ", 40, 300)
+
+        # Hemodynamic Check (Shock Index)
+        is_unstable = check_shock_index(hr, sbp)
+
+        # 3. INTERACTIVE GCS
         print("\n[NEUROLOGICAL ASSESSMENT (GCS)]")
         e = get_valid_score("  Eyes (1-4): ", 1, 4, "4:Spontaneous, 3:Voice, 2:Pain, 1:None")
         v = get_valid_score("  Verbal (1-5): ", 1, 5, "5:Oriented, 4:Confused, 3:Inapprop., 2:Sounds, 1:None")
         m = get_valid_score("  Motor (1-6): ", 1, 6, "6:Obeys, 5:Localizes, 4:Flexion, 3:Abnormal, 2:Extension, 1:None")
         gcs_score = e + v + m
+        print(f"  >>> Computed GCS Total: {gcs_score}/15")
 
-        # 4. PAIN ASSESSMENT (NRS)
+        # 4. PAIN ASSESSMENT
         display_nrs_legend()
         nrs_score = get_valid_score("  Enter NRS Score (0-10): ", 0, 10)
 
         # 5. DECISION ENGINE
-        suggested_pathway = "Standard Observation"
-        assigned_code = "GREEN" # Baseline
+        suggested_code = "GREEN"
 
-        # --- PATHWAY & SYMPTOM LOGIC ---
-        if any(x in symptom for x in ["arrest", "coma", "shock", "massive hemorrhage"]):
-            assigned_code = "RED"
-            suggested_pathway = "RESUSCITATION AREA"
-        elif any(x in symptom for x in ["chest pain", "angina", "myocardial"]):
-            assigned_code = "ORANGE"
-            suggested_pathway = "CARDIAC PATHWAY (ECG < 10 min)"
-        elif any(x in symptom for x in ["stroke", "ictus", "deficit", "speech"]):
-            assigned_code = "RED"
-            suggested_pathway = "STROKE UNIT PATHWAY"
-        elif any(x in symptom for x in ["trauma", "accident", "fall"]):
-            assigned_code = "YELLOW"
-            suggested_pathway = "TRAUMA PATHWAY"
+        # Symptom-based priority
+        if any(x in symptom for x in ["arrest", "coma", "shock", "hemorrhage", "bleeding"]):
+            suggested_code = "RED"
+        elif any(x in symptom for x in ["chest pain", "angina"]):
+            suggested_code = "ORANGE"
 
-        # --- VITAL SIGNS CROSS-CHECK ---
-        if gcs_score <= 8 or sp2 < 90 or hr > 140 or hr < 40:
-            assigned_code = "RED"
-        elif (9 <= gcs_score <= 12) or (90 <= sp2 < 94) or (110 <= hr <= 140):
-            if TRIAGE_CODES.index(assigned_code) < TRIAGE_CODES.index("YELLOW"):
-                assigned_code = "YELLOW"
+        # Neurological / Hemodynamic Hard-Stops
+        if gcs_score <= 8:
+            suggested_code = "RED"
+        elif is_unstable:
+            suggested_code = "ORANGE"
+            print("  [SYSTEM ACTION] High Shock Index forced priority to ORANGE.")
 
-        # --- CLINICAL CONGRUENCY ALERT (v0.4.0) ---
-        if nrs_score >= 7 and (60 <= hr <= 85) and (110 <= sbp <= 140):
-            print("\n[!] ⚠️  SYSTEM ALERT: DUBIOUS CLINICAL CONGRUENCY")
-            print(f"--> Severe pain reported (NRS: {nrs_score}), but vital signs are stable.")
-            print("--> Assess for psychophysical stress, anxiety, or malingering.")
-            print("--> Visual reassessment required before confirming the code.")
-
-        # --- PAIN-BASED UPGRADE (X + 1 Logic) ---
+        # Pain-based upgrade (X + 1 Logic)
+        final_code = suggested_code
         if nrs_score >= 7:
-            current_idx = TRIAGE_CODES.index(assigned_code)
-            if current_idx < len(TRIAGE_CODES) - 1:
-                assigned_code = TRIAGE_CODES[current_idx + 1]
-                print(f"\n[CLINICAL INFO] Pain-based priority upgrade to: {assigned_code}")
+            idx = TRIAGE_CODES.index(suggested_code)
+            if idx < len(TRIAGE_CODES) - 1:
+                final_code = TRIAGE_CODES[idx + 1]
+                print(f"  [CLINICAL UPGRADE] High pain intensity. Recommended: {final_code}")
 
-        # 6. FINAL REVIEW & CONFIRMATION
-        print("\n" + "-"*55)
-        print(f" TRIAGE SUMMARY FOR: {display_name}")
-        print(f" FINAL PROPOSED CODE: {assigned_code}")
-        print(f" SUGGESTED PATHWAY: {suggested_pathway}")
-        print("-"*55)
-        
-        conf = input(f"Confirm assignment for {display_name}? (y/n): ").lower()
+        # 6. AUDIT & OVERRIDE
+        print(f"\n>>> RECOMMENDED CODE: {final_code}")
+        conf = input(f"Confirm {final_code}? (y/n): ").lower()
+
+        actual_code = final_code
         if conf != 'y':
-            assigned_code = input(f"Select manual code {TRIAGE_CODES}: ").upper()
+            actual_code = input(f"Select Manual Code {TRIAGE_CODES}: ").upper()
+            if actual_code not in TRIAGE_CODES: actual_code = final_code
+            # LOG MANUAL OVERRIDE
+            log_event(f"OVERRIDE - Op: {operator_id} modified {display_name} from {final_code} to {actual_code}")
 
-        # 7. LOGGING & DASHBOARD
-        triage_counters[assigned_code] += 1
-        all_patients.append(f"Patient: {display_name} | CODE: {assigned_code} | NRS: {nrs_score} | GCS: {gcs_score}")
+        # 7. FINALIZATION & LOGGING
+        triage_counters[actual_code] += 1
+        si_status = "CRITICAL" if is_unstable else "STABLE"
+        log_event(
+            f"ADMISSION - Op: {operator_id} | Pat: {display_name} | Code: {actual_code} | GCS: {gcs_score} | SI: {si_status}")
 
-        print("\n[ WARD STATUS - LIVE DASHBOARD ]")
-        for color in TRIAGE_CODES:
-            if triage_counters[color] > 0:
-                print(f"  {color}: {triage_counters[color]} patient(s)")
-        
-        input("\nPress Enter to admit next patient...")
+        print(f"\nPatient {display_name} admitted with code {actual_code}.")
 
-    print("\n" + "="*55)
-    print("SESSION CLOSED - Final Ward Report:")
-    for color, count in triage_counters.items():
-        print(f"  {color}: {count}")
-    print("\nSession closed. Handover reports ready. Shift ended.")
+    log_event(f"SHIFT_END - Operator: {operator_id}")
+    print("\nShift ended. Audit log secured. Goodbye!")
+
 
 if __name__ == "__main__":
     main()
