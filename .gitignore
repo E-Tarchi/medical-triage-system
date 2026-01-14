@@ -1,0 +1,20 @@
+# Python - File compilati (inutili da caricare)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyCharm - Impostazioni specifiche del tuo PC (dimensioni finestre, percorsi locali)
+.idea/
+
+# Ambienti virtuali (se ne usi uno, non va mai su GitHub)
+venv/
+env/
+
+# File di log generati dal programma (così non carichi i tuoi test personali)
+*.log
+triage_history.csv
+triage_audit_log.txt
+
+# File di sistema
+.DS_Store
+Thumbs.db

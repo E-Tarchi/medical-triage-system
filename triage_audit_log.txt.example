@@ -1,0 +1,12 @@
+# TUSCANY TRIAGE SYSTEM - CLINICAL AUDIT LOG EXAMPLE
+# ---------------------------------------------------------------------------
+# Version: 0.6.2
+# Format: [TIMESTAMP] EVENT_TYPE - Operator: ID | Clinical Data Summary
+# ---------------------------------------------------------------------------
+
+[2026-01-12 08:00:15] SHIFT_START - Operator: TARCHI_E
+[2026-01-12 08:15:42] ADMISSION - Op: TARCHI_E | Pat: Mario Rossi | Code: GREEN | GCS: 15 | SI: STABLE | NRS: 2
+[2026-01-12 08:30:10] ADMISSION - Op: TARCHI_E | Pat: Giulia Bianchi | Code: ORANGE | GCS: 15 | SI: CRITICAL (0.95) | NRS: 4
+[2026-01-12 08:45:22] OVERRIDE - Op: TARCHI_E modified Luca Verga from GREEN to YELLOW | Reason: Clinical intuition/Patient history
+[2026-01-12 09:00:05] ADMISSION - Op: TARCHI_E | Pat: Anna Neri | Code: RED | GCS: 7 | SI: CRITICAL (1.1) | NRS: N/A
+[2026-01-12 14:00:00] SHIFT_END - Operator: TARCHI_E
