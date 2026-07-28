@@ -7,6 +7,9 @@
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
+> 🌐 **GRC Portfolio Case Study:** This repository is part of a broader collection of Governance, Risk & Compliance (GRC) and AI Regulatory Assessment case studies.  
+> 👉 **[Explore the Main GRC Portfolio Hub](https://github.com/emanuele-tarchi-it/grc-portfolio-case-study)**
+
 ---
 
 ## 🧬 Vision & Current Focus
